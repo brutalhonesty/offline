@@ -22,12 +22,21 @@ module.exports = (grunt) ->
         tasks: ["coffee", "uglify", "compass"]
 
     uglify:
-      options:
-        banner: "/*! <%= pkg.name %> <%= pkg.version %> */\n"
-
+      dev:
+        options:
+          compress: false
+          mangle: false
+          beautify: true
+          banner: "/*! <%= pkg.name %> <%= pkg.version %> */\n"
+        files:
+          'offline.js': ['js/*', '!js/snake.js']
       dist:
-        src: ['js/*', '!js/snake.js']
-        dest: 'offline.min.js'
+        options:
+          banner: "/*! <%= pkg.name %> <%= pkg.version %> */\n"
+        files:
+          'offline.min.js': ['js/*', '!js/snake.js']
+
+
 
     compass:
       dist:
@@ -40,4 +49,4 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-coffee'
   grunt.loadNpmTasks 'grunt-contrib-compass'
 
-  grunt.registerTask 'default', ['coffee', 'uglify', 'compass']
+  grunt.registerTask 'default', ['coffee', 'uglify:dev', 'uglify:dist', 'compass']
